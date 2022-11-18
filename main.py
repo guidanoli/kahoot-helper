@@ -9,8 +9,8 @@ import sys
 def validate_script(script):
     assert type(script) is dict, script
     assert type(script['options']) is list, script
-    for name in script['options']:
-        assert type(name) is str, name
+    for option in script['options']:
+        assert type(option) is str, option
     assert type(script['questions']) is list, script
     for question in script['questions']:
         assert type(question) is dict, question
