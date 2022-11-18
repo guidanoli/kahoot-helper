@@ -8,19 +8,19 @@ import sys
 
 def validate_script(script):
     assert type(script) is dict, script
-    assert type(script['names']) is list, script
-    for name in script['names']:
+    assert type(script['options']) is list, script
+    for name in script['options']:
         assert type(name) is str, name
     assert type(script['questions']) is list, script
     for question in script['questions']:
         assert type(question) is dict, question
         assert type(question['q']) is str, question
         assert type(question['a']) is str, question
-        assert question['a'] in script['names'], question
+        assert question['a'] in script['options'], question
 
 
 def randomize_script_order(script):
-    random.shuffle(script['names'])
+    random.shuffle(script['options'])
     random.shuffle(script['questions'])
 
 
@@ -51,8 +51,8 @@ def countdown(t):
             print(f"Invalid input '{inp}'")
 
 
-def get_options(answer, names):
-    population = list(set(names) - {answer})
+def get_options(answer, options):
+    population = list(set(options) - {answer})
     options = random.sample(population, min(3, len(population)))
     options.append(answer)
     random.shuffle(options)
@@ -64,7 +64,7 @@ def run_script(script, countdown_time, wait_time):
     randomize_script_order(script)
     ok = countdown(countdown_time)
     for qi, question in enumerate(script['questions'], 1):
-        options = get_options(question['a'], script['names'])
+        options = get_options(question['a'], script['options'])
         while True:
             print(f"Question #{qi}: ", end='')
             copy_print_wait(question['q'], wait_time)
