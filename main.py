@@ -19,11 +19,6 @@ def validate_script(script):
         assert question['a'] in script['options'], question
 
 
-def randomize_script_order(script):
-    random.shuffle(script['options'])
-    random.shuffle(script['questions'])
-
-
 def copy_print_wait(string, t):
     pyperclip.copy(string)
     print('"{}"'.format(string), end='')
@@ -35,8 +30,9 @@ def copy_print_wait(string, t):
 
 
 def countdown(t):
+    query = ">>> Enter 'c' to continue or 'r' to repeat: "
     while True:
-        inp = input(">>> Enter 'c' to continue or 'r' to repeat: ").lower()
+        inp = input(query).trim().lower()
         if 'c' in inp:
             for i in range(t, 0, -1):
                 print(f'{i}... ', end='')
@@ -51,25 +47,27 @@ def countdown(t):
             print(f"Invalid input '{inp}'")
 
 
-def get_options(answer, options):
+def get_question_options(answer, options):
     population = list(set(options) - {answer})
-    options = random.sample(population, min(3, len(population)))
-    options.append(answer)
-    random.shuffle(options)
-    return options
+    question_options = random.sample(population, min(3, len(population)))
+    question_options.append(answer)
+    random.shuffle(question_options)
+    return question_options
 
 
-def run_script(script, countdown_time, wait_time):
+def run_script(script, countdown_time, wait_time, start_from):
     validate_script(script)
-    randomize_script_order(script)
     ok = countdown(countdown_time)
-    for qi, question in enumerate(script['questions'], 1):
-        options = get_options(question['a'], script['options'])
+    questions = script['questions'][start_from:]
+    all_options = script['options']
+    for qi, question in enumerate(questions, 1 + start_from):
+        answer = question['a']
+        question_options = get_question_options(answer, all_options)
         while True:
             print(f"Question #{qi}: ", end='')
             copy_print_wait(question['q'], wait_time)
-            for opti, option in enumerate(options, 1):
-                if option == question['a']:
+            for opti, option in enumerate(question_options, 1):
+                if option == answer:
                     print(f"Option #{opti} (answer): ", end='')
                 else:
                     print(f"Option #{opti}: ", end='')
@@ -96,10 +94,18 @@ def main():
         type=int,
         default=0,
         help='Number of seconds to wait before every question')
+    parser.add_argument(
+        '--start-from',
+        type=int,
+        default=0,
+        help='Index of first question to start with')
     args = parser.parse_args()
     with open(args.yaml_script) as fp:
         script = yaml.load(fp, yaml.CLoader)
-        run_script(script, args.countdown_time, args.wait_time)
+        run_script(script,
+                   args.countdown_time,
+                   args.wait_time,
+                   args.start_from)
 
 
 if __name__ == '__main__':
