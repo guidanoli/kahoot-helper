@@ -1,6 +1,6 @@
 # Helper Python Script for Making Kahoots
 
-This script is aimed to help create kahoot games where you have a set of options $O$ and a set of questions $Q$ where for every $q \in Q$ there is exactly one right answer $ans(q) \in O$ and three wrong answers $o_1, o_2, o_3 \in O \setminus \\{ ans(q) \\}$. The input is formatted in YAML in the following format. Note that every answer must be contained in the set of options.
+This script is aimed to help create kahoot games where you have a set of options $O$ and a set of questions $Q$ where for every $q \in Q$ there is exactly one right answer $ans(q) \in O$ and at most three different wrong answers $o \in O \setminus \\{ ans(q) \\}$. The input is formatted in YAML in the following format. Note that every answer must be contained in the set of options.
 
 ```yaml
 options:
