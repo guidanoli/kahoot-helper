@@ -87,7 +87,7 @@ def main():
     parser.add_argument(
         '--wait-time',
         type=int,
-        default=5,
+        default=3,
         help='Number of seconds to wait after copying string to clipboard')
     parser.add_argument(
         '--countdown-time',
