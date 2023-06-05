@@ -32,7 +32,7 @@ def copy_print_wait(string, t):
 def countdown(t):
     query = ">>> Enter 'c' to continue or 'r' to repeat: "
     while True:
-        inp = input(query).trim().lower()
+        inp = input(query).strip().lower()
         if 'c' in inp:
             for i in range(t, 0, -1):
                 print(f'{i}... ', end='')
